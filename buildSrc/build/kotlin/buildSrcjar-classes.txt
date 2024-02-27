@@ -1,0 +1,1 @@
+/Users/michalpolanski/Workspace/supla-android-launcher/buildSrc/build/classes/kotlin/main/LocalPropertiesReader.class

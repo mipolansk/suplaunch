@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#FF12A71E</color>
+    <color name="on_surface">#FF000000</color>
+    <color name="floating_view_background">#DDDCDEE0</color>
+</resources>

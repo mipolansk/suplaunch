@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="supla_not_installed">Supla wurde nicht installiert!</string>
+  <string name="version">Suplaunch Version %1$s</string>
+  <string name="update_check">Aktualisierung prüfen</string>
+  <string name="ewelink_not_installed">Ewelink App wurde nicht installiert!</string>
+  <string name="turn_screen_off">Schalte Bildshirm aus</string>
+</resources>

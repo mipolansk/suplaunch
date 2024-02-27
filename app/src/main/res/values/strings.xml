@@ -1,0 +1,9 @@
+<resources>
+  <string name="app_name" translatable="false">Suplaunch</string>
+  <string name="brand_name" translatable="false">supla</string>
+  <string name="supla_not_installed">Supla is not installed!</string>
+  <string name="version">Suplaunch Version %1$s</string>
+  <string name="update_check">Update check</string>
+  <string name="ewelink_not_installed">Ewelink App not installed</string>
+  <string name="turn_screen_off">Turn off screen</string>
+</resources>

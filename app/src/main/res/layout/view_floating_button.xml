@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="40dp"
+  android:layout_height="40dp">
+
+  <View
+    android:layout_width="40dp"
+    android:layout_height="20dp"
+    android:background="@drawable/back_floating_home" />
+
+  <ImageView
+    android:id="@+id/floating_home_arrow_icon"
+    android:layout_width="12dp"
+    android:layout_height="12dp"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="4dp"
+    android:src="@drawable/ic_arrow_down"
+    android:tint="@color/on_surface" />
+
+</RelativeLayout>
