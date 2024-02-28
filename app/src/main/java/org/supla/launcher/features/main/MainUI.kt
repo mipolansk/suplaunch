@@ -1,5 +1,9 @@
 package org.supla.launcher.features.main
 
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,22 +54,14 @@ fun MainUI(
   onSuplaClick: (() -> Unit)? = null,
   onDownloadClick: (() -> Unit)? = null,
   onOffClick: (() -> Unit)? = null,
-  sensorValue: String? = null
+  sensorManager: SensorManager? = null
 ) {
   Box(
     modifier = Modifier
       .fillMaxSize()
       .background(color = MaterialTheme.colorScheme.primary)
   ) {
-    sensorValue?.let {
-      Text(
-        text = "S: $sensorValue",
-        style = MaterialTheme.typography.bodyMedium,
-        modifier = Modifier
-          .align(Alignment.TopEnd)
-          .padding(all = Distance.big)
-      )
-    }
+    DistanceSensorValue(sensorManager, modifier = Modifier.align(Alignment.TopEnd))
 
     DayAndHour(
       modifier = Modifier
@@ -90,7 +86,7 @@ fun MainUI(
         .fillMaxWidth()
         .padding(all = Distance.normal)
     ) {
-      DownloadButton(modifier = Modifier.align(Alignment.CenterStart)) { onDownloadClick?.let { it() } }
+//      DownloadButton(modifier = Modifier.align(Alignment.CenterStart)) { onDownloadClick?.let { it() } }
       Version(modifier = Modifier.align(Alignment.Center))
       OffButton(modifier = Modifier.align(Alignment.CenterEnd)) { onOffClick?.let { it() } }
     }
@@ -203,6 +199,34 @@ private fun OffButton(modifier: Modifier = Modifier, onClick: () -> Unit) =
     )
   }
 
+@Composable
+private fun DistanceSensorValue(sensorManager: SensorManager?, modifier: Modifier = Modifier) {
+  if (BuildConfig.DEBUG) {
+    var position by remember { mutableStateOf(0f) }
+
+    remember {
+      val listener = object : SensorEventListener {
+        override fun onSensorChanged(p0: SensorEvent?) {
+          p0?.values?.firstOrNull()?.let { position = it }
+        }
+
+        override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}
+      }
+      sensorManager?.getDefaultSensor(Sensor.TYPE_PROXIMITY)?.let { sensor ->
+        sensorManager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+      }
+      listener
+    }
+
+
+    Text(
+      text = "S: $position",
+      style = MaterialTheme.typography.bodyMedium,
+      modifier = modifier
+        .padding(all = Distance.big)
+    )
+  }
+}
 
 @Preview(showBackground = true)
 @Composable

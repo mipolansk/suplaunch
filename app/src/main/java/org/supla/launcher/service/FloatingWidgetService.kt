@@ -117,7 +117,7 @@ class FloatingWidgetService : Service() {
       PixelFormat.TRANSLUCENT
     )
     buttonParams.gravity = Gravity.TOP or Gravity.START
-    buttonParams.x = 88.dp.toPx().toInt()
+    buttonParams.x = 95.dp.toPx().toInt()
     buttonParams.y = BUTTON_CLOSED_POSITION
 
     floatingButton?.let { view ->

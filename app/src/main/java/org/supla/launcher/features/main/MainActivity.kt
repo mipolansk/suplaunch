@@ -3,9 +3,6 @@ package org.supla.launcher.features.main
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Context
 import android.content.Intent
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.net.Uri
 import android.os.Bundle
@@ -14,12 +11,12 @@ import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.supla.launcher.R
 import org.supla.launcher.core.BaseActivity
 import org.supla.launcher.service.FloatingWidgetService
@@ -57,40 +54,23 @@ class MainActivity : BaseActivity<MainViewEvent, MainViewState>() {
       }
     }
 
-  private var active = true
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     sleepModeService.onCreate(window)
 
-    setContent {
-      var position by remember { mutableStateOf(0f) }
-
-      val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager?
-      sensorManager?.getDefaultSensor(Sensor.TYPE_PROXIMITY)?.let { sensor ->
-        sensorManager.registerListener(object : SensorEventListener {
-          override fun onSensorChanged(p0: SensorEvent?) {
-            p0?.values?.firstOrNull()?.let {
-              position = it
-            }
-          }
-
-          override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
-          }
-        }, sensor, 500_000)
+    lifecycleScope.launch {
+      CoroutineScope(Dispatchers.IO).launch {
+        sleepModeService.launchStateMachine()
       }
+    }
 
+    setContent {
       SuplaLauncherTheme {
-        MainUI (
+        MainUI(
           onSuplaClick = { startSupla() },
           onDownloadClick = { viewModel.download() },
-          onOffClick = {
-            val attributes = window.attributes
-            attributes.screenBrightness = if (active) .01f else 1f
-            active = !active
-            window.attributes = attributes
-          },
-          sensorValue = String.format("%.2f", position)
+          onOffClick = { sleepModeService.forceSleepState() },
+          sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager?
         )
       }
     }
