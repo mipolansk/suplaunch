@@ -1,0 +1,202 @@
+package org.supla.launcher.service
+
+import android.content.Context
+import android.content.Intent
+import android.view.Window
+import dagger.hilt.android.qualifiers.ApplicationContext
+import org.supla.launcher.features.main.MainActivity
+import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
+
+// Use for emulator
+private const val WEAK_UP_DISTANCE = 5f
+private const val WEAK_UP_DELAY_MINS = 1
+
+// Use for real device
+//private const val WEAK_UP_DISTANCE = 1000f
+//private const val WEAK_UP_DELAY_MINS = 5
+
+@Singleton
+class SleepModeStateMachine @Inject constructor(
+  @ApplicationContext private val context: Context
+) {
+
+  private var state: State = State.AwakeState(this)
+  private var window: Window? = null
+
+  fun attach(window: Window) {
+    this.window = window
+  }
+
+  fun detach() {
+    window = null
+  }
+
+  fun handleEvent(event: SleepModeEvent) {
+    state.handleEvent(event)
+  }
+
+  private fun changeState(state: State) {
+    Timber.i("State change from ${this.state.javaClass.simpleName} to ${state.javaClass.simpleName}")
+    this.state = state
+  }
+
+  private fun screenDim() {
+    Timber.i("Dimming screen")
+    window?.let {
+      val attributes = it.attributes
+      attributes.screenBrightness = 0f
+      it.attributes = attributes
+    }
+  }
+
+  private fun screenBrighten() {
+    Timber.i("Brightening screen")
+    window?.let {
+      val attributes = it.attributes
+      attributes.screenBrightness = 1f
+      it.attributes = attributes
+    }
+  }
+
+  private fun reopenApp() {
+    Timber.i("Reopening application")
+    context.startActivity(Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+  }
+
+  private sealed class State(protected val machine: SleepModeStateMachine) {
+
+    abstract fun handleEvent(event: SleepModeEvent)
+
+    class SleepingState(machine: SleepModeStateMachine) : State(machine) {
+      override fun handleEvent(event: SleepModeEvent) {
+        when (event) {
+          is SleepModeEvent.Distance -> handleDistance(event.distance)
+          is SleepModeEvent.AppState -> handleAppState(event.state)
+        }
+
+      }
+
+      private fun handleDistance(distance: Float) {
+        if (distance < WEAK_UP_DISTANCE) {
+          machine.screenBrighten()
+          machine.changeState(AwakeState(machine))
+        }
+      }
+
+      private fun handleAppState(state: SleepModeEvent.AppState.Value) {
+        if (state is SleepModeEvent.AppState.Background) {
+          machine.changeState(BackgroundState(machine))
+        }
+      }
+    }
+
+    class AwakeState(machine: SleepModeStateMachine) : State(machine) {
+      override fun handleEvent(event: SleepModeEvent) {
+        when (event) {
+          is SleepModeEvent.Distance -> handleDistance(event.distance)
+          is SleepModeEvent.AppState -> handleAppState(event.state)
+        }
+      }
+
+      private fun handleDistance(distance: Float) {
+        if (distance > WEAK_UP_DISTANCE) {
+          machine.changeState(InactiveForegroundState(machine))
+        }
+      }
+
+      private fun handleAppState(state: SleepModeEvent.AppState.Value) {
+        if (state is SleepModeEvent.AppState.Background) {
+          machine.changeState(BackgroundState(machine))
+        }
+      }
+    }
+
+    class InactiveForegroundState(machine: SleepModeStateMachine) : State(machine) {
+
+      private val stateStartTime: Long = System.currentTimeMillis()
+
+      override fun handleEvent(event: SleepModeEvent) {
+        when (event) {
+          is SleepModeEvent.Distance -> handleDistance(event.distance)
+          is SleepModeEvent.AppState -> handleAppState(event.state)
+        }
+      }
+
+      private fun handleDistance(distance: Float) {
+        if (distance > WEAK_UP_DISTANCE && timeElapsed()) {
+          machine.screenDim()
+          machine.changeState(SleepingState(machine))
+        }
+        if (distance < WEAK_UP_DISTANCE) {
+          machine.changeState(AwakeState(machine))
+        }
+      }
+
+      private fun handleAppState(state: SleepModeEvent.AppState.Value) {
+        if (state is SleepModeEvent.AppState.Background) {
+          machine.changeState(BackgroundState(machine))
+        }
+      }
+
+      private fun timeElapsed(): Boolean =
+        stateStartTime + WEAK_UP_DELAY_MINS.times(60000) < System.currentTimeMillis()
+    }
+
+    class BackgroundState(machine: SleepModeStateMachine) : State(machine) {
+      override fun handleEvent(event: SleepModeEvent) {
+        when (event) {
+          is SleepModeEvent.Distance -> handleDistance(event.distance)
+          is SleepModeEvent.AppState -> handleAppState(event.state)
+        }
+      }
+
+      private fun handleDistance(distance: Float) {
+        if (distance > WEAK_UP_DISTANCE) {
+          machine.changeState(InactiveBackgroundState(machine))
+        }
+      }
+
+      private fun handleAppState(state: SleepModeEvent.AppState.Value) {
+        if (state is SleepModeEvent.AppState.Foreground) {
+          machine.changeState(AwakeState(machine))
+        }
+      }
+    }
+
+    class InactiveBackgroundState(machine: SleepModeStateMachine) : State(machine) {
+
+      private val stateStartTime: Long = System.currentTimeMillis()
+
+      override fun handleEvent(event: SleepModeEvent) {
+        when (event) {
+          is SleepModeEvent.Distance -> handleDistance(event.distance)
+          is SleepModeEvent.AppState -> handleAppState(event.state)
+        }
+      }
+
+      private fun handleDistance(distance: Float) {
+        if (distance > WEAK_UP_DISTANCE && timeElapsed()) {
+          machine.reopenApp()
+          machine.screenDim()
+          machine.changeState(SleepingState(machine))
+        }
+        if (distance < WEAK_UP_DISTANCE) {
+          machine.changeState(BackgroundState(machine))
+        }
+      }
+
+      private fun handleAppState(state: SleepModeEvent.AppState.Value) {
+        if (state is SleepModeEvent.AppState.Foreground) {
+          machine.changeState(InactiveForegroundState(machine))
+        }
+      }
+
+      private fun timeElapsed(): Boolean =
+        stateStartTime + WEAK_UP_DELAY_MINS.times(60000) < System.currentTimeMillis()
+
+    }
+  }
+}
+

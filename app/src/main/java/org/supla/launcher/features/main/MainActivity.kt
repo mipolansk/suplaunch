@@ -23,12 +23,17 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.supla.launcher.R
 import org.supla.launcher.core.BaseActivity
 import org.supla.launcher.service.FloatingWidgetService
+import org.supla.launcher.service.SleepModeService
 import org.supla.launcher.ui.theme.SuplaLauncherTheme
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<MainViewEvent, MainViewState>() {
 
   override val viewModel: MainViewModel by viewModels()
+
+  @Inject
+  lateinit var sleepModeService: SleepModeService
 
   private val requestPermissionLauncher =
     registerForActivityResult(
@@ -52,10 +57,11 @@ class MainActivity : BaseActivity<MainViewEvent, MainViewState>() {
       }
     }
 
-  var active = true
+  private var active = true
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    sleepModeService.onCreate(window)
 
     setContent {
       var position by remember { mutableStateOf(0f) }
@@ -84,7 +90,7 @@ class MainActivity : BaseActivity<MainViewEvent, MainViewState>() {
             active = !active
             window.attributes = attributes
           },
-          //sensorValue = String.format("%.2f", position)
+          sensorValue = String.format("%.2f", position)
         )
       }
     }
@@ -92,6 +98,11 @@ class MainActivity : BaseActivity<MainViewEvent, MainViewState>() {
     if (!Settings.canDrawOverlays(this)) {
       askOverlayPermission()
     }
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    sleepModeService.onDestroy()
   }
 
   override fun handleEvent(viewEvent: MainViewEvent) {
