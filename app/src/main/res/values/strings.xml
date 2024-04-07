@@ -6,4 +6,5 @@
   <string name="update_check">Update check</string>
   <string name="ewelink_not_installed">Ewelink App not installed</string>
   <string name="turn_screen_off">Turn off screen</string>
+  <string name="launch_failed">Launch failed</string>
 </resources>

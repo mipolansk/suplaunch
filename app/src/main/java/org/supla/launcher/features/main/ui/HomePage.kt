@@ -1,19 +1,18 @@
-package org.supla.launcher.features.main
+package org.supla.launcher.features.main.ui
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -39,57 +38,52 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.supla.launcher.BuildConfig
 import org.supla.launcher.R
+import org.supla.launcher.features.main.MainViewState
 import org.supla.launcher.ui.theme.Distance
 import org.supla.launcher.ui.theme.SuplaLauncherTheme
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-
 private val hourFormatter = DateTimeFormatter.ofPattern("HH")
 private val minuteFormatter = DateTimeFormatter.ofPattern("mm")
 private val dateFormatter = DateTimeFormatter.ofPattern("EEEE, dd LLLL")
 
+context(BoxScope)
 @Composable
-fun MainUI(
+fun HomePage(
   onSuplaClick: (() -> Unit)? = null,
   onDownloadClick: (() -> Unit)? = null,
   onOffClick: (() -> Unit)? = null,
   sensorManager: SensorManager? = null
 ) {
+  DistanceSensorValue(sensorManager, modifier = Modifier.align(Alignment.TopEnd))
+
+  DayAndHour(
+    modifier = Modifier
+      .align(Alignment.TopStart)
+      .padding(start = Distance.big, top = 80.dp)
+  )
+
+  Logo(
+    modifier = Modifier
+      .align(Alignment.BottomCenter)
+      .padding(bottom = 80.dp)
+      .clickable(
+        interactionSource = MutableInteractionSource(),
+        indication = rememberRipple(),
+        onClick = { onSuplaClick?.let { it() } }
+      )
+  )
+
   Box(
     modifier = Modifier
-      .fillMaxSize()
-      .background(color = MaterialTheme.colorScheme.primary)
+      .align(Alignment.BottomCenter)
+      .fillMaxWidth()
+      .padding(all = Distance.normal)
   ) {
-    DistanceSensorValue(sensorManager, modifier = Modifier.align(Alignment.TopEnd))
-
-    DayAndHour(
-      modifier = Modifier
-        .align(Alignment.TopStart)
-        .padding(start = Distance.big, top = 80.dp)
-    )
-
-    Logo(
-      modifier = Modifier
-        .align(Alignment.BottomCenter)
-        .padding(bottom = 80.dp)
-        .clickable(
-          interactionSource = MutableInteractionSource(),
-          indication = rememberRipple(),
-          onClick = { onSuplaClick?.let { it() } }
-        )
-    )
-
-    Box(
-      modifier = Modifier
-        .align(Alignment.BottomCenter)
-        .fillMaxWidth()
-        .padding(all = Distance.normal)
-    ) {
 //      DownloadButton(modifier = Modifier.align(Alignment.CenterStart)) { onDownloadClick?.let { it() } }
-      Version(modifier = Modifier.align(Alignment.Center))
-      OffButton(modifier = Modifier.align(Alignment.CenterEnd)) { onOffClick?.let { it() } }
-    }
+    Version(modifier = Modifier.align(Alignment.Center))
+    OffButton(modifier = Modifier.align(Alignment.CenterEnd)) { onOffClick?.let { it() } }
   }
 }
 
@@ -230,8 +224,10 @@ private fun DistanceSensorValue(sensorManager: SensorManager?, modifier: Modifie
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+private fun Preview() {
   SuplaLauncherTheme {
-    MainUI()
+    Box {
+      HomePage()
+    }
   }
 }

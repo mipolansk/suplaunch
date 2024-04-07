@@ -1,6 +1,7 @@
 package org.supla.launcher.di
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.hardware.SensorManager
 import dagger.Module
 import dagger.Provides
@@ -17,4 +18,9 @@ class AppModule {
   @Singleton
   fun provideSensorManager(@ApplicationContext context: Context): SensorManager =
     context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+
+  @Provides
+  @Singleton
+  fun providePackageManager(@ApplicationContext context: Context): PackageManager =
+    context.packageManager
 }

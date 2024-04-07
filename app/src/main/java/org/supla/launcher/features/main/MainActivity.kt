@@ -1,7 +1,6 @@
 package org.supla.launcher.features.main
 
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.content.Context
 import android.content.Intent
 import android.hardware.SensorManager
 import android.net.Uri
@@ -11,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.runtime.collectAsState
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.supla.launcher.R
 import org.supla.launcher.core.BaseActivity
+import org.supla.launcher.features.main.ui.MainUI
 import org.supla.launcher.service.FloatingWidgetService
 import org.supla.launcher.service.SleepModeService
 import org.supla.launcher.ui.theme.SuplaLauncherTheme
@@ -67,10 +68,12 @@ class MainActivity : BaseActivity<MainViewEvent, MainViewState>() {
     setContent {
       SuplaLauncherTheme {
         MainUI(
+          viewModel.viewState.collectAsState().value,
           onSuplaClick = { startSupla() },
           onDownloadClick = { viewModel.download() },
           onOffClick = { sleepModeService.forceSleepState() },
-          sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager?
+          onAppClick = { viewModel.launchApp(it) },
+          sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager?
         )
       }
     }
@@ -88,6 +91,8 @@ class MainActivity : BaseActivity<MainViewEvent, MainViewState>() {
   override fun handleEvent(viewEvent: MainViewEvent) {
     when (viewEvent) {
       is MainViewEvent.AskPermission -> askWritePermission()
+      is MainViewEvent.LaunchApplication -> startActivity(viewEvent.intent)
+      is MainViewEvent.LaunchFailed -> Toast.makeText(this, R.string.launch_failed, Toast.LENGTH_SHORT).show()
     }
   }
 

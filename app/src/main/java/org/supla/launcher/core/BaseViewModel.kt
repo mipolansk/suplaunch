@@ -30,6 +30,13 @@ abstract class BaseViewModel<E : ViewEvent, S: ViewState>(defaultState: S) : Vie
     viewEventsFlow.tryEmit(Event(event))
   }
 
+  protected fun updateState(updater: (S) -> S) {
+    viewStateFlow.tryEmit(updater(viewStateFlow.value))
+  }
+
+  open fun onCreated() {
+  }
+
   private data class Event<T>(
     val item: T,
     var processed: Boolean = false

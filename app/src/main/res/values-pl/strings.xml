@@ -5,4 +5,5 @@
   <string name="update_check">Sprawdzenie aktualizacji</string>
   <string name="ewelink_not_installed">Ewelink App nie została zainstalowana!</string>
   <string name="turn_screen_off">Wyłącz ekran</string>
+  <string name="launch_failed">Błąd startu aplikacji</string>
 </resources>

@@ -13,6 +13,7 @@ abstract class BaseActivity<E : ViewEvent, S: ViewState> : ComponentActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    viewModel.onCreated()
 
     lifecycleScope.launch {
       repeatOnLifecycle(Lifecycle.State.STARTED) {
