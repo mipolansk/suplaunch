@@ -14,8 +14,8 @@ android {
         applicationId = "org.supla.launcher"
         minSdk = 26
         targetSdk = 33
-        versionCode = 4
-        versionName = "0.1.0"
+        versionCode = 5
+        versionName = "0.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
