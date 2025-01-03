@@ -4,12 +4,13 @@ Suplaunch is an open source project. Developed application can be used as Launch
 
 ## Installation
 
-Download the latest release app use ADB to install it on the device
+Download the latest release app and use ADB to install it on the device
 
 ```
 adb install downloaded-file.apk
 ```
 
+If the app is already installed you can use `-r` option to override existing installation.
 After file is installed you can force "home" button click with the following command
 
 ```

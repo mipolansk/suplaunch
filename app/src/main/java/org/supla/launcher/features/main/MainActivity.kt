@@ -73,6 +73,9 @@ class MainActivity : BaseActivity<MainViewEvent, MainViewState>() {
           onDownloadClick = { viewModel.download() },
           onOffClick = { sleepModeService.forceSleepState() },
           onAppClick = { viewModel.launchApp(it) },
+          onUpdateClose = viewModel::closeUpdateDialog,
+          onUpdateStart = viewModel::performUpdate,
+          onFailedDialogClose = viewModel::closeUpdateFailedDialog,
           sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager?
         )
       }

@@ -17,14 +17,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -38,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.supla.launcher.BuildConfig
 import org.supla.launcher.R
-import org.supla.launcher.features.main.MainViewState
 import org.supla.launcher.ui.theme.Distance
 import org.supla.launcher.ui.theme.SuplaLauncherTheme
 import java.time.LocalDateTime
@@ -51,6 +53,8 @@ private val dateFormatter = DateTimeFormatter.ofPattern("EEEE, dd LLLL")
 context(BoxScope)
 @Composable
 fun HomePage(
+  updateIndeterminateProgress: Boolean,
+  updateProgress: Int?,
   onSuplaClick: (() -> Unit)? = null,
   onDownloadClick: (() -> Unit)? = null,
   onOffClick: (() -> Unit)? = null,
@@ -69,8 +73,8 @@ fun HomePage(
       .align(Alignment.BottomCenter)
       .padding(bottom = 80.dp)
       .clickable(
-        interactionSource = MutableInteractionSource(),
-        indication = rememberRipple(),
+        interactionSource = remember { MutableInteractionSource() },
+        indication = ripple(),
         onClick = { onSuplaClick?.let { it() } }
       )
   )
@@ -81,7 +85,30 @@ fun HomePage(
       .fillMaxWidth()
       .padding(all = Distance.normal)
   ) {
-//      DownloadButton(modifier = Modifier.align(Alignment.CenterStart)) { onDownloadClick?.let { it() } }
+    if (updateProgress != null) {
+      Box(
+        modifier = Modifier.align(Alignment.CenterStart)
+      ) {
+        CircularProgressIndicator(
+          progress = { updateProgress.div(100f) },
+          modifier = Modifier
+            .align(Alignment.Center)
+            .size(36.dp),
+          color = MaterialTheme.colorScheme.onPrimary,
+          trackColor = MaterialTheme.colorScheme.primary
+        )
+        Text("$updateProgress%", style = MaterialTheme.typography.bodySmall, modifier = Modifier.align(Alignment.Center))
+      }
+    } else if (updateIndeterminateProgress) {
+      CircularProgressIndicator(
+        modifier = Modifier
+          .align(Alignment.CenterStart)
+          .size(36.dp),
+        color = MaterialTheme.colorScheme.onPrimary
+      )
+    } else {
+      DownloadButton(modifier = Modifier.align(Alignment.CenterStart)) { onDownloadClick?.let { it() } }
+    }
     Version(modifier = Modifier.align(Alignment.Center))
     OffButton(modifier = Modifier.align(Alignment.CenterEnd)) { onOffClick?.let { it() } }
   }
@@ -111,7 +138,7 @@ private fun DayAndHour(modifier: Modifier = Modifier) {
   var hourString by remember { mutableStateOf("") }
   var minuteString by remember { mutableStateOf("") }
   var dateString by remember { mutableStateOf("") }
-  var counter by remember { mutableStateOf(0) }
+  var counter by remember { mutableIntStateOf(0) }
   var semicolonVisible by remember { mutableStateOf(true) }
 
   LaunchedEffect(Any()) {
@@ -196,7 +223,7 @@ private fun OffButton(modifier: Modifier = Modifier, onClick: () -> Unit) =
 @Composable
 private fun DistanceSensorValue(sensorManager: SensorManager?, modifier: Modifier = Modifier) {
   if (BuildConfig.DEBUG) {
-    var position by remember { mutableStateOf(0f) }
+    var position by remember { mutableFloatStateOf(0f) }
 
     remember {
       val listener = object : SensorEventListener {
@@ -227,7 +254,7 @@ private fun DistanceSensorValue(sensorManager: SensorManager?, modifier: Modifie
 private fun Preview() {
   SuplaLauncherTheme {
     Box {
-      HomePage()
+      HomePage(false, null)
     }
   }
 }

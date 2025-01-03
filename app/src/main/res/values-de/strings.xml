@@ -6,4 +6,11 @@
   <string name="ewelink_not_installed">Ewelink App wurde nicht installiert!</string>
   <string name="turn_screen_off">Schalte Bildshirm aus</string>
   <string name="launch_failed">Appstart fehlgeschlagen</string>
+  <string name="update_title">Aktualisierung</string>
+  <string name="update_available">Neues Version ist vorhanden. Wollen Sie die Installation starten?</string>
+  <string name="update_unavailable">Keines neuen Version vorhanden.</string>
+  <string name="update_start">Aktualisieren</string>
+  <string name="cancel">Abbrechen</string>
+  <string name="close">Schließen</string>
+  <string name="update_failed">Die Aktualisierung ist fehlgeschlagen. Bitte versuchen Sie später noch mal an.</string>
 </resources>

@@ -7,4 +7,11 @@
   <string name="ewelink_not_installed">Ewelink App not installed</string>
   <string name="turn_screen_off">Turn off screen</string>
   <string name="launch_failed">Launch failed</string>
+  <string name="update_title">App Update</string>
+  <string name="update_available">New version is available. Do you want to install it?</string>
+  <string name="update_unavailable">No update available.</string>
+  <string name="update_start">Update</string>
+  <string name="cancel">Cancel</string>
+  <string name="close">Close</string>
+  <string name="update_failed">The update could not be applied. Please try again later</string>
 </resources>

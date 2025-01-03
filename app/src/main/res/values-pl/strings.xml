@@ -6,4 +6,11 @@
   <string name="ewelink_not_installed">Ewelink App nie została zainstalowana!</string>
   <string name="turn_screen_off">Wyłącz ekran</string>
   <string name="launch_failed">Błąd startu aplikacji</string>
+  <string name="update_title">Aktualizacja</string>
+  <string name="update_available">Nowa wersja jest dostępna, czy chcesz ją zainstalować?</string>
+  <string name="update_unavailable">Brak nowej wersji.</string>
+  <string name="update_start">Aktualizuj</string>
+  <string name="cancel">Anuluj</string>
+  <string name="close">Zamknij</string>
+  <string name="update_failed">Instalacja aktualizacji nie powiodła się. Spróbuj ponownie później.</string>
 </resources>
