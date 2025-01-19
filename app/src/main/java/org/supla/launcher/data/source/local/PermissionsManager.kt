@@ -12,9 +12,6 @@ import javax.inject.Singleton
 class PermissionsManager @Inject constructor(@ApplicationContext private val context: Context) {
 
   fun isWritePermissionGranted(): Boolean {
-    return ContextCompat.checkSelfPermission(
-      context,
-      Manifest.permission.WRITE_EXTERNAL_STORAGE
-    ) == PackageManager.PERMISSION_GRANTED
+    return ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
   }
 }

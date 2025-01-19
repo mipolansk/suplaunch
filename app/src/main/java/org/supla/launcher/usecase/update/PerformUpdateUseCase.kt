@@ -13,8 +13,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import okhttp3.ResponseBody
 import org.supla.launcher.BuildConfig
+import org.supla.launcher.data.model.GithubProject
 import org.supla.launcher.data.model.Version
-import org.supla.launcher.data.source.network.DownloadUpdateApi
+import org.supla.launcher.data.source.network.GithubApi
 import org.supla.launcher.usecase.version.CheckSuplaVersionUseCase
 import timber.log.Timber
 import java.io.File
@@ -23,14 +24,14 @@ import javax.inject.Singleton
 
 @Singleton
 class PerformUpdateUseCase @Inject constructor(
-  private val downloadUpdateApi: DownloadUpdateApi,
+  private val githubApi: GithubApi,
   private val checkSuplaVersionUseCase: CheckSuplaVersionUseCase,
   @ApplicationContext private val context: Context
 ) {
 
-  operator fun invoke(): Flow<State> {
+  operator fun invoke(project: GithubProject): Flow<State> {
     return flow {
-      val release = downloadUpdateApi.latestRelease()
+      val release = githubApi.latestRelease(project.projectName, project.repoName)
 
       val remoteVersion = Version.parse(release.name)
       if (remoteVersion == null) {
@@ -51,11 +52,11 @@ class PerformUpdateUseCase @Inject constructor(
         emit(FailedState())
         return@flow
       }
-      val fileResponse = downloadUpdateApi.apkFile(downloadUrl)
+      val fileResponse = githubApi.apkFile(downloadUrl)
 
 
       val destinationDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-      val destinationFile = File(destinationDirectory, "SUPLA.apk")
+      val destinationFile = File(destinationDirectory, project.destinationFileName)
 
       val body = fileResponse.body()
       if (body == null) {

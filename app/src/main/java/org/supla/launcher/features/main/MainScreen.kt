@@ -1,4 +1,4 @@
-package org.supla.launcher.features.main.ui
+package org.supla.launcher.features.main
 
 import android.hardware.SensorManager
 import androidx.compose.foundation.background
@@ -8,25 +8,27 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import org.supla.launcher.features.main.Application
-import org.supla.launcher.features.main.MainViewState
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import org.supla.launcher.features.main.ui.AppsPage
+import org.supla.launcher.features.main.ui.HomePage
 import org.supla.launcher.ui.theme.SuplaLauncherTheme
 
-
 @Composable
-fun MainUI(
-  viewState: MainViewState,
+fun MainScreen(
+  navController: NavController,
   onSuplaClick: (() -> Unit)? = null,
-  onDownloadClick: (() -> Unit)? = null,
-  onOffClick: (() -> Unit)? = null,
-  onAppClick: ((Application) -> Unit)? = null,
-  onUpdateClose: () -> Unit = {},
-  onUpdateStart: () -> Unit = {},
-  onFailedDialogClose: () -> Unit = {},
-  sensorManager: SensorManager? = null
+  sensorManager: SensorManager? = null,
+  viewModel: MainViewModel = hiltViewModel()
 ) {
+  viewModel.Load()
+  val viewState by viewModel.viewState.collectAsState()
+
   Box {
     HorizontalPager(
       state = rememberPagerState { 2 },
@@ -39,38 +41,22 @@ fun MainUI(
       ) {
         when (page) {
           0 -> HomePage(
-            viewState.showIndeterminateProgress,
-            viewState.showProgress,
             onSuplaClick,
-            onDownloadClick,
-            onOffClick,
+            viewModel::forceSleep,
             sensorManager
           )
 
-          1 -> AppsPage(viewState.applications, onAppClick)
+          1 -> AppsPage(navController, viewState.applications, viewModel::launchApp)
         }
       }
     }
-
-    viewState.updateAvailable?.let {
-      UpdateAvailableDialog(
-        updateAvailable = it,
-        onUpdateClose = onUpdateClose,
-        onUpdateStart = onUpdateStart
-      )
-    }
-
-    if (viewState.showUpdateFailed) {
-      UpdateFailedDialog(onClose = onFailedDialogClose)
-    }
   }
-
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
   SuplaLauncherTheme {
-    MainUI(MainViewState())
+    MainScreen(rememberNavController())
   }
 }

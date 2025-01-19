@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.supla.launcher.data.source.network.DownloadUpdateApi
+import org.supla.launcher.data.source.network.GithubApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
@@ -19,8 +19,8 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideDownloadUpdateApi(@Named(RETROFIT_GITHUB) retrofit: Retrofit): DownloadUpdateApi =
-        retrofit.create(DownloadUpdateApi::class.java)
+    fun provideDownloadUpdateApi(@Named(RETROFIT_GITHUB) retrofit: Retrofit): GithubApi =
+        retrofit.create(GithubApi::class.java)
 
     @Provides
     @Singleton

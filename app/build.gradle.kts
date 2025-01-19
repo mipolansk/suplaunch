@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.compose)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.serialization)
 }
 
 android {
@@ -14,8 +15,8 @@ android {
         applicationId = "org.supla.launcher"
         minSdk = 26
         targetSdk = 35
-        versionCode = 6
-        versionName = "0.3.0"
+        versionCode = 7
+        versionName = "0.4.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -85,6 +86,10 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.gson)
     implementation(libs.gson.converter)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.navigation)
+    implementation(libs.json.serialization)
+    implementation(libs.androidx.hilt.navigation)
 
     implementation(libs.retrofit)
 

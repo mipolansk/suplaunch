@@ -4,13 +4,14 @@ import okhttp3.ResponseBody
 import org.supla.launcher.data.source.network.dto.ReleaseDto
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Streaming
 import retrofit2.http.Url
 
-interface DownloadUpdateApi {
+interface GithubApi {
 
-    @GET("repos/SUPLA/supla-android/releases/latest")
-    suspend fun latestRelease(): ReleaseDto
+    @GET("repos/{project}/{repository}/releases/latest")
+    suspend fun latestRelease(@Path("project") project: String, @Path("repository") repository: String): ReleaseDto
 
     @Streaming
     @GET

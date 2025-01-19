@@ -13,4 +13,10 @@
   <string name="cancel">Abbrechen</string>
   <string name="close">Schließen</string>
   <string name="update_failed">Die Aktualisierung ist fehlgeschlagen. Bitte versuchen Sie später noch mal an.</string>
+  <string name="settings">Einstellungen</string>
+  <string name="back">Zurück</string>
+  <string name="suplaunch_version">Version des Suplaunch</string>
+  <string name="refresh">Aktualisieren</string>
+  <string name="supla_version">Version des Supla</string>
+  <string name="no_supla_installed">Keine Supla Anwendung installiert</string>
 </resources>

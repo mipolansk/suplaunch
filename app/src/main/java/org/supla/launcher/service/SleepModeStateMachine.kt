@@ -6,7 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.Window
 import dagger.hilt.android.qualifiers.ApplicationContext
-import org.supla.launcher.features.main.MainActivity
+import org.supla.launcher.features.MainActivity
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton

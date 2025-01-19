@@ -13,11 +13,10 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -53,10 +52,7 @@ private val dateFormatter = DateTimeFormatter.ofPattern("EEEE, dd LLLL")
 context(BoxScope)
 @Composable
 fun HomePage(
-  updateIndeterminateProgress: Boolean,
-  updateProgress: Int?,
   onSuplaClick: (() -> Unit)? = null,
-  onDownloadClick: (() -> Unit)? = null,
   onOffClick: (() -> Unit)? = null,
   sensorManager: SensorManager? = null
 ) {
@@ -79,39 +75,9 @@ fun HomePage(
       )
   )
 
-  Box(
-    modifier = Modifier
-      .align(Alignment.BottomCenter)
-      .fillMaxWidth()
-      .padding(all = Distance.normal)
-  ) {
-    if (updateProgress != null) {
-      Box(
-        modifier = Modifier.align(Alignment.CenterStart)
-      ) {
-        CircularProgressIndicator(
-          progress = { updateProgress.div(100f) },
-          modifier = Modifier
-            .align(Alignment.Center)
-            .size(36.dp),
-          color = MaterialTheme.colorScheme.onPrimary,
-          trackColor = MaterialTheme.colorScheme.primary
-        )
-        Text("$updateProgress%", style = MaterialTheme.typography.bodySmall, modifier = Modifier.align(Alignment.Center))
-      }
-    } else if (updateIndeterminateProgress) {
-      CircularProgressIndicator(
-        modifier = Modifier
-          .align(Alignment.CenterStart)
-          .size(36.dp),
-        color = MaterialTheme.colorScheme.onPrimary
-      )
-    } else {
-      DownloadButton(modifier = Modifier.align(Alignment.CenterStart)) { onDownloadClick?.let { it() } }
-    }
-    Version(modifier = Modifier.align(Alignment.Center))
-    OffButton(modifier = Modifier.align(Alignment.CenterEnd)) { onOffClick?.let { it() } }
-  }
+  OffButton(modifier = Modifier
+    .align(Alignment.BottomEnd)
+    .padding(all = Distance.normal)) { onOffClick?.let { it() } }
 }
 
 @Composable
@@ -190,26 +156,6 @@ private fun DayAndHour(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Version(modifier: Modifier = Modifier) =
-  Text(
-    text = stringResource(id = R.string.version, BuildConfig.VERSION_NAME),
-    modifier = modifier,
-    style = MaterialTheme.typography.bodySmall,
-    color = MaterialTheme.colorScheme.onPrimary,
-  )
-
-@Composable
-private fun DownloadButton(modifier: Modifier = Modifier, onClick: () -> Unit) =
-  IconButton(onClick = onClick, modifier = modifier) {
-    Icon(
-      painter = painterResource(id = R.drawable.ic_download),
-      contentDescription = stringResource(id = R.string.update_check),
-      tint = MaterialTheme.colorScheme.onPrimary,
-      modifier = Modifier.size(48.dp)
-    )
-  }
-
-@Composable
 private fun OffButton(modifier: Modifier = Modifier, onClick: () -> Unit) =
   IconButton(onClick = onClick, modifier = modifier) {
     Icon(
@@ -249,12 +195,12 @@ private fun DistanceSensorValue(sensorManager: SensorManager?, modifier: Modifie
   }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true, backgroundColor = 0xFF12A71E)
 @Composable
 private fun Preview() {
   SuplaLauncherTheme {
-    Box {
-      HomePage(false, null)
+    Box(modifier = Modifier.fillMaxSize()) {
+      HomePage(null)
     }
   }
 }

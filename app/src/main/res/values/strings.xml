@@ -14,4 +14,10 @@
   <string name="cancel">Cancel</string>
   <string name="close">Close</string>
   <string name="update_failed">The update could not be applied. Please try again later</string>
+  <string name="settings">Settings</string>
+  <string name="back">Back</string>
+  <string name="suplaunch_version">Suplaunch version</string>
+  <string name="refresh">Refresh</string>
+  <string name="supla_version">Supla version</string>
+  <string name="no_supla_installed">No Supla app installed</string>
 </resources>
