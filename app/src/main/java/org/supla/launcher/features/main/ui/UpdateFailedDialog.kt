@@ -9,11 +9,12 @@ import org.supla.launcher.R
 
 @Composable
 fun UpdateFailedDialog(
-  onClose: () -> Unit,
+  appName: String,
+  onClose: () -> Unit
 ) =
   AlertDialog(
     onDismissRequest = onClose,
-    title = { Text(stringResource(R.string.update_title)) },
+    title = { Text(stringResource(R.string.update_title, appName)) },
     text = { Text(stringResource(R.string.update_failed)) },
     confirmButton = {
       Button(onClick = onClose) {

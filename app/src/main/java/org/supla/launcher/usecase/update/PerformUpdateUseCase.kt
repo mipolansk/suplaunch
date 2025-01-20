@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.flowOn
 import okhttp3.ResponseBody
 import org.supla.launcher.BuildConfig
 import org.supla.launcher.data.model.GithubProject
+import org.supla.launcher.data.model.SuplaProject
+import org.supla.launcher.data.model.SuplaunchProject
 import org.supla.launcher.data.model.Version
 import org.supla.launcher.data.source.network.GithubApi
 import org.supla.launcher.usecase.version.CheckSuplaVersionUseCase
@@ -39,7 +41,10 @@ class PerformUpdateUseCase @Inject constructor(
         return@flow
       }
 
-      val currentVersion = checkSuplaVersionUseCase()
+      val currentVersion = when (project) {
+        is SuplaProject -> checkSuplaVersionUseCase()
+        is SuplaunchProject -> Version.parse(BuildConfig.VERSION_NAME)
+      }
 
       if (currentVersion != null && remoteVersion <= currentVersion) {
         Timber.i("No newer version found, update skipped")
@@ -53,7 +58,6 @@ class PerformUpdateUseCase @Inject constructor(
         return@flow
       }
       val fileResponse = githubApi.apkFile(downloadUrl)
-
 
       val destinationDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
       val destinationFile = File(destinationDirectory, project.destinationFileName)

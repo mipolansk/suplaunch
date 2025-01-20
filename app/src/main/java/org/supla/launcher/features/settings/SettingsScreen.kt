@@ -70,11 +70,11 @@ fun SettingsScreen(
     }
 
     if (state.suplaUpdateFailed) {
-      UpdateFailedDialog(onClose = viewModel::closeSuplaUpdateFailedDialog)
+      UpdateFailedDialog("Supla", onClose = viewModel::closeSuplaUpdateFailedDialog)
     }
 
     if (state.suplaunchUpdateFailed) {
-      UpdateFailedDialog(onClose = viewModel::closeSuplaunchUpdateFailedDialog)
+      UpdateFailedDialog("Suplaunch", onClose = viewModel::closeSuplaunchUpdateFailedDialog)
     }
   }
 }
