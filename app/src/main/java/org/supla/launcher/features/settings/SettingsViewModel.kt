@@ -143,12 +143,12 @@ data class SettingsViewState(
   val suplaVersion: String? = null,
 
   val loadingSuplaVersion: Boolean = false,
-  val suplaUpdateAvailable: Boolean? = null,
+  val suplaUpdateAvailable: CheckUpdateUseCase.Result? = null,
   val suplaDownloadProgress: Float? = null,
   val suplaUpdateFailed: Boolean = false,
 
   val loadingSuplaunchVersion: Boolean = false,
-  val suplaunchUpdateAvailable: Boolean? = null,
+  val suplaunchUpdateAvailable: CheckUpdateUseCase.Result? = null,
   val suplaunchDownloadProgress: Float? = null,
   val suplaunchUpdateFailed: Boolean = false,
 ) : ViewState()

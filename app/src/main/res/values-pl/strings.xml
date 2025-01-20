@@ -6,8 +6,8 @@
   <string name="ewelink_not_installed">Ewelink App nie została zainstalowana!</string>
   <string name="turn_screen_off">Wyłącz ekran</string>
   <string name="launch_failed">Błąd startu aplikacji</string>
-  <string name="update_title">Aktualizacja</string>
-  <string name="update_available">Nowa wersja jest dostępna, czy chcesz ją zainstalować?</string>
+  <string name="update_title">%1$s - aktualizacja</string>
+  <string name="update_available">Nowa wersja (%1$s) aplikacji %2$s jest dostępna, czy chcesz ją zainstalować?</string>
   <string name="update_unavailable">Brak nowej wersji.</string>
   <string name="update_start">Aktualizuj</string>
   <string name="cancel">Anuluj</string>
@@ -19,4 +19,5 @@
   <string name="refresh">Refresh</string>
   <string name="supla_version">Wersja Supla</string>
   <string name="no_supla_installed">Brak aplikacji supla</string>
+  <string name="update_check_error">Nie udało się sprawdzić dostępności nowej wersji. Spróbuj ponownie później.</string>
 </resources>

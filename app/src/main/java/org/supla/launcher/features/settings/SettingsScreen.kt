@@ -52,7 +52,8 @@ fun SettingsScreen(
 
     state.suplaUpdateAvailable?.let {
       UpdateAvailableDialog(
-        updateAvailable = it,
+        result = it,
+        appName = "Supla",
         onUpdateClose = viewModel::closeSuplaUpdateDialog,
         onUpdateStart = viewModel::performSuplaUpdate
       )
@@ -60,7 +61,8 @@ fun SettingsScreen(
 
     state.suplaunchUpdateAvailable?.let {
       UpdateAvailableDialog(
-        updateAvailable = it,
+        result = it,
+        appName = "Suplaunch",
         onUpdateClose = viewModel::closeSuplaunchUpdateDialog,
         onUpdateStart = viewModel::performSuplaunchUpdate
       )

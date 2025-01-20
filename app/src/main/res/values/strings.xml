@@ -7,8 +7,8 @@
   <string name="ewelink_not_installed">Ewelink App not installed</string>
   <string name="turn_screen_off">Turn off screen</string>
   <string name="launch_failed">Launch failed</string>
-  <string name="update_title">App Update</string>
-  <string name="update_available">New version is available. Do you want to install it?</string>
+  <string name="update_title">%1$s Update</string>
+  <string name="update_available">New version (%1$s) of %2$s is available. Do you want to install it?</string>
   <string name="update_unavailable">No update available.</string>
   <string name="update_start">Update</string>
   <string name="cancel">Cancel</string>
@@ -20,4 +20,5 @@
   <string name="refresh">Refresh</string>
   <string name="supla_version">Supla version</string>
   <string name="no_supla_installed">No Supla app installed</string>
+  <string name="update_check_error">Update check failed, please try again later.</string>
 </resources>
