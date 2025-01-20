@@ -101,7 +101,8 @@ private fun SettingsView(navController: NavController, viewModel: SettingsViewMo
       icon = Icons.Default.Refresh,
       iconDescription = stringResource(R.string.refresh),
       action = viewModel::checkSuplaunchUpdate,
-      loading = state.loadingSuplaunchVersion
+      loading = state.loadingSuplaunchVersion,
+      loadingPercentage = state.suplaunchDownloadProgress
     )
 
     SettingsRow(

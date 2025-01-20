@@ -109,7 +109,7 @@ class SettingsViewModel @Inject constructor(
     viewModelScope.launch {
       updateState { it.copy(suplaunchDownloadProgress = 0f, suplaunchUpdateAvailable = null) }
 
-      performUpdateUseCase(SuplaProject).collect { state ->
+      performUpdateUseCase(SuplaunchProject).collect { state ->
         withContext(Dispatchers.Main) {
           when (state) {
             is PerformUpdateUseCase.DownloadingState ->
