@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.HideSource
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -66,14 +67,17 @@ fun AppsPage(
     ) {
       Version(modifier = Modifier.align(Alignment.Center))
 
-      Icon(
-        Icons.Filled.Settings,
-        contentDescription = stringResource(R.string.settings),
-        modifier = Modifier
-          .align(Alignment.CenterEnd)
-          .clickable { navController.navigate(Settings) },
-        tint = MaterialTheme.colorScheme.onPrimary
-      )
+      IconButton(
+        onClick = { navController.navigate(Settings) },
+        modifier = Modifier.align(Alignment.CenterEnd)
+      ) {
+        Icon(
+          Icons.Filled.Settings,
+          contentDescription = stringResource(R.string.settings),
+          modifier = Modifier.size(48.dp),
+          tint = MaterialTheme.colorScheme.onPrimary
+        )
+      }
     }
 
   }

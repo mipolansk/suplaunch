@@ -1,6 +1,7 @@
 package org.supla.launcher.features.settings
 
 import android.content.Intent
+import android.provider.Settings
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -136,6 +137,10 @@ class SettingsViewModel @Inject constructor(
     updateState { it.copy(suplaunchUpdateFailed = false) }
   }
 
+  fun openNetworkSettings() {
+    val intent = Intent(Settings.ACTION_WIFI_SETTINGS).apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK }
+    appEventsManager.send(LaunchApplication(intent))
+  }
 }
 
 

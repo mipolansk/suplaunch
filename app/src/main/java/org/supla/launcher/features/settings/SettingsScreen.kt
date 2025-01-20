@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CircularProgressIndicator
@@ -94,6 +95,14 @@ private fun SettingsView(navController: NavController, viewModel: SettingsViewMo
     }
 
     Spacer(modifier = Modifier.height(Distance.normal))
+
+    SettingsRow(
+      title = stringResource(R.string.settings_network),
+      text = stringResource(R.string.settings_network_subtitle),
+      icon = Icons.AutoMirrored.Outlined.ArrowForward,
+      iconDescription = stringResource(R.string.settings_network),
+      action = viewModel::openNetworkSettings,
+    )
 
     SettingsRow(
       title = stringResource(R.string.suplaunch_version),

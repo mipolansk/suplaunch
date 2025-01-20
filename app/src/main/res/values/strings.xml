@@ -21,4 +21,6 @@
   <string name="supla_version">Supla version</string>
   <string name="no_supla_installed">No Supla app installed</string>
   <string name="update_check_error">Update check failed, please try again later.</string>
+  <string name="settings_network">Network and internet</string>
+  <string name="settings_network_subtitle">Wi-Fi</string>
 </resources>
